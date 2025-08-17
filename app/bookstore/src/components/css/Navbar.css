@@ -1,0 +1,77 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  background-color: #4a47a3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo {
+  height: 36px;
+  width: 36px;
+}
+
+.app-name {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.navbar-right {
+  display: flex;
+  gap: 14px;
+}
+
+.nav-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.login-button {
+  color: #4a47a3;
+  background-color: #ffffff;
+  border: none;
+}
+
+.login-button:hover {
+  background-color: #e3e1fa;
+}
+
+.signup-button {
+  background-color: #fdb44b;
+  color: #4a47a3;
+  border: none;
+}
+
+.signup-button:hover {
+  background-color: #f7a623;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-right {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .nav-button {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,0 +1,165 @@
+.seller-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  background: #0f172a;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  box-shadow: 0 2px 12px rgba(2, 6, 23, 0.6);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo-icon {
+  font-size: 20px;
+}
+
+.logo-text {
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.3px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 0;
+  transition: color 0.18s ease, border-bottom 0.18s ease;
+}
+
+.nav-links a:hover {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.profile-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  font-size: 26px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.2s ease;
+}
+
+.profile-icon:hover {
+  color: #fbbf24;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #0b1220;
+  border-radius: 8px;
+  min-width: 160px;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.6);
+  overflow: hidden;
+  animation: fadeIn 160ms ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+  padding: 10px 14px;
+  color: #fff;
+  text-decoration: none;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+  background: #111827;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 880px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    right: 12px;
+    width: 240px;
+    background: #071123;
+    padding: 18px;
+    border-radius: 10px;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+  }
+  
+  .nav-links.open {
+    display: flex;
+  }
+  
+  .nav-toggle {
+    display: block;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}

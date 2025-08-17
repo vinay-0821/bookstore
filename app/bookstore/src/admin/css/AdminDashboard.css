@@ -1,0 +1,169 @@
+.admin-dashboard {
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2d2d2d;
+}
+
+.stats-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1 1 22%;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.stat-card p,
+.stat-card span {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-card.blue { border-left: 6px solid #4a90e2; }
+.stat-card.green { border-left: 6px solid #7ed957; }
+.stat-card.purple { border-left: 6px solid #9b59b6; }
+.stat-card.orange { border-left: 6px solid #f39c12; }
+
+.tables-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.user-table {
+  flex: 1 1 48%;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.table-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.table-header button {
+  padding: 6px 12px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.table-header button:hover {
+  background-color: #357ab7;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #f1f1f1;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  word-wrap: break-word;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 992px) {
+  .stat-card {
+    flex: 1 1 45%;
+  }
+  
+  .user-table {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .stat-card {
+    flex: 1 1 100%;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.5rem;
+  }
+
+  td {
+    border: none;
+    padding: 0.5rem;
+    position: relative;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+}

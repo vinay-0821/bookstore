@@ -1,0 +1,145 @@
+.book-page {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.book-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.book-left img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+}
+
+.book-right {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.book-details, .book-reviews {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+.book-details h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.book-details p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.book-reviews h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #444;
+}
+
+.review-card {
+  border-bottom: 1px solid #eee;
+  padding: 0.8rem 0;
+}
+
+.review-card:last-child {
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.review-name {
+  color: #222;
+}
+
+.review-rating {
+  color: #e3b341;
+}
+
+.review-desc {
+  font-size: 0.95rem;
+  color: #555;
+  margin-left: 0.5rem;
+}
+
+.seller-add-book-form {
+  display: flex;
+  gap: 2rem;
+}
+
+.form-left, .form-right {
+  flex: 1;
+}
+
+.image-upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

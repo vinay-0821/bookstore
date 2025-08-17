@@ -1,0 +1,142 @@
+.login,
+.signup {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  align-items: center;
+  min-height: calc(100vh - 7vh);
+}
+
+img {
+  padding-left: 50px;
+  padding-right: 50px;
+  width: 80%;
+  height: 75%;
+  object-fit: contain;
+}
+
+.login-form,
+.signup-form {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+
+.login-form h1,
+.signup-form h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #111827;
+}
+
+.login-form form,
+.signup-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input,
+.signup-form input {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.login-form input:focus,
+.signup-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.login-form button,
+.signup-form button {
+  padding: 12px;
+  background-color: #3b82f6;
+  color: white;
+  font-size: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-form button:hover,
+.signup-form button:hover {
+  background-color: #2563eb;
+}
+
+.login-form p,
+.signup-form p {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.login-form a,
+.signup-form a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.login-form a:hover,
+.signup-form a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-style: italic;
+}
+
+.role-toggle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+.role-toggle label {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .login,
+  .signup {
+    grid-template-columns: 1fr;
+    grid-template-rows: 40vh 1fr;
+    height: calc(100vh - 60px);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0;
+  }
+
+  .login-form,
+  .signup-form {
+    padding: 2rem;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form h1,
+  .signup-form h1 {
+    font-size: 2rem;
+  }
+
+  .login-form input,
+  .login-form button,
+  .signup-form button,
+  .signup-form input {
+    font-size: 0.95rem;
+    padding: 0.65rem;
+  }
+}
