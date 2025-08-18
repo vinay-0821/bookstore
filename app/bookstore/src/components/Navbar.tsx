@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./css/Navbar.css";
 
+import { Cart, PersonCircle } from "react-bootstrap-icons";
+
 export default function Navbar() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (!token) return;
 
     fetch("http://localhost:5000/auth/verify", {
@@ -37,20 +39,63 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <span className="app-name">BookStore</span>
+        <Link to="/customer/home" className="app-name">
+          BookStore
+        </Link>
       </div>
+
+      {loggedIn && (
+        <div className="navbar-middle">
+          <Link to="/customer/home">Home</Link>
+          <Link to="/customer/categories">Categories</Link>
+          <Link to="/customer/orders">Orders</Link>
+        </div>
+      )}
+
       <div className="navbar-right">
         {loggedIn ? (
-          <button onClick={handleLogout} className="nav-button logout-button">
-            Logout
-          </button>
+          <div className="icons-container">
+            <Link to="/customer/cart" className="icon-link">
+              <Cart size={22} />
+            </Link>
+            <div className="profile-dropdown2">
+              <PersonCircle
+                size={26}
+                className="profile-icon"
+                onClick={toggleDropdown}
+              />
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <Link to="/customer/account" onClick={closeDropdown}>
+                    My Account
+                  </Link>
+                  <Link to="/customer/wishlist" onClick={closeDropdown}>
+                    Wishlist
+                  </Link>
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          </div>
         ) : (
           <>
-            <Link to="/login" className="nav-button login-button">Login</Link>
-            <Link to="/signup" className="nav-button signup-button">Sign Up</Link>
+            <Link to="/login" className="nav-button login-button">
+              Login
+            </Link>
+            <Link to="/signup" className="nav-button signup-button">
+              Sign Up
+            </Link>
           </>
         )}
       </div>

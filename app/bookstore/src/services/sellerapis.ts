@@ -332,7 +332,7 @@ export const addBook = async (formData: any) => {
 export const updateBook = async (bookid: number | string, formData: any) => {
   const token = localStorage.getItem("token");
 
-  // console.log("api formdata: ", formData);
+  console.log("api formdata: ", formData);
 
   const data = new FormData();
   Object.entries(formData).forEach(([key, value]) => {
@@ -347,7 +347,7 @@ export const updateBook = async (bookid: number | string, formData: any) => {
     } 
   });
 
-  // console.log("apis calling: ", data);
+  console.log("apis calling: ", data);
   // console.log(Array.from(data.entries()));
   // for (const pair of Array.from(data.entries())) {
   //   console.log(pair[0], pair[1]);

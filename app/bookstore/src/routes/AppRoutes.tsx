@@ -24,7 +24,7 @@ export default function AppRoutes() {
     <Routes>
         <Route path='/' element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} /> {/* implement feature that it has to navigate to home when tries to goes to login page after loggedin */}
         <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/admin/approvesellers" element={<PrivateRoute allowedRoles={['admin']}><SellerApprovalPage /></PrivateRoute>} />
         <Route path="/admin/customers" element={<PrivateRoute allowedRoles={['admin']}><AdminCustomers /></PrivateRoute>} />

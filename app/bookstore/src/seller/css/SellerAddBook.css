@@ -86,7 +86,7 @@
 .form-group input,
 .form-group textarea,
 .form-group select,
-.form-group option  {
+.form-group option {
   width: 90%;
   padding: 0.7rem;
   font-size: 1rem;

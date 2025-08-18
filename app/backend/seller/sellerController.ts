@@ -297,8 +297,10 @@ export const updateBookController = async (req: any, res: any) => {
 
      const { title, author, isbn, price, description, stock, genre, image } = req.body;
 
+    //  console.log("Book data:", { title, author, isbn, price, description, stock, genre, image });
 
-     if (!title || !author || !isbn || !price || !description || !stock || !genre || !image) {
+
+     if (!title || !author || !isbn || !price || !description || !stock || !genre ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -332,7 +334,7 @@ export const updateBookController = async (req: any, res: any) => {
       sellerid, 
     });
 
-    console.log("results: ",res);
+    // console.log("results: ",res);
     res.status(200).json(updatedBook);
   } catch (err: any) {
     console.error("Update book error:", err);

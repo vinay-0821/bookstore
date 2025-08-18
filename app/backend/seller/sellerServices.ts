@@ -380,6 +380,8 @@ interface UpdateBookInput {
 
 export const updateBookService = async (bookx: UpdateBookInput) => {
 
+  console.log(bookx);
+
   const [bookRows] = await (await db).query(
     "SELECT * FROM books WHERE bookid = ? AND userid = ?", 
     [bookx.bookid, bookx.sellerid]
@@ -387,13 +389,25 @@ export const updateBookService = async (bookx: UpdateBookInput) => {
 
   const book = bookRows[0];
   if (!book) throw new Error("Book not found or not authorized");
-
-  await (await db).query(
-    `UPDATE books 
-     SET title=?, author=?, isbn=?, price=?, description=?, stock=? 
-     WHERE bookid=?`,
-    [bookx.title, bookx.author, bookx.isbn, bookx.price, bookx.description, bookx.stock, bookx.bookid]
-  );
+  
+  if(bookx.image == undefined){
+    console.log("No image");
+    await (await db).query(
+      `UPDATE books 
+      SET title=?, author=?, isbn=?, price=?, description=?, stock=? 
+      WHERE bookid=?`,
+      [bookx.title, bookx.author, bookx.isbn, bookx.price, bookx.description, bookx.stock, bookx.bookid]
+    );
+  }
+  else{
+    console.log("imaged");
+    await (await db).query(
+      `UPDATE books 
+      SET title=?, author=?, isbn=?, price=?, description=?, stock=? , imageurl=?
+      WHERE bookid=?`,
+      [bookx.title, bookx.author, bookx.isbn, bookx.price, bookx.description, bookx.stock, bookx.image, bookx.bookid]
+    );
+  }
 
   if (bookx.genre && Array.isArray(bookx.genre)) {
     await (await db).query("DELETE FROM bookgenre WHERE bookid = ?", [bookx.bookid]);

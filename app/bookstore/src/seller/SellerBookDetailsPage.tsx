@@ -127,9 +127,23 @@ export default function SellerBookDetailsPage() {
     if (!book) return;
 
     try {
-      // console.log("Book data: ",formData);
+      const updateData: any = {
+        title: formData.title,
+        author: formData.author,
+        isbn: formData.isbn,
+        price: formData.price,
+        description: formData.description,
+        stock: formData.stock,
+        genre: formData.genre,
+      };
+
+      if (formData.image) {
+        updateData.image = formData.image;
+      }
+
+      console.log("Book data: ",updateData);
       // console.log(book);
-      const result = await updateBook(book.bookid, formData);
+      const result = await updateBook(book.bookid, updateData);
       console.log("Book added successfully:", result);
       alert("Book updated successfully!");
       setIsEditing(false);
