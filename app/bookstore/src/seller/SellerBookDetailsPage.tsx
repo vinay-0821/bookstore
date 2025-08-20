@@ -215,9 +215,9 @@ export default function SellerBookDetailsPage() {
           {!isEditing ? (
             <>
               <div className="book-details">
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
-                  <button onClick={() => setIsEditing(true)}>Edit</button>
-                  <button onClick={handleDelete}>Delete</button>
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem"}}>
+                  <button style={ {backgroundColor: "blue", borderRadius: "8px", color: "white"}} onClick={() => setIsEditing(true)}>Edit</button>
+                  <button style={ {backgroundColor: "red", borderRadius: "8px", color: "white"}} onClick={handleDelete}>Delete</button>
                 </div>
 
                 <h2>{book.title}</h2>

@@ -41,3 +41,13 @@ export const isSeller = (req: CustomRequest, res: Response, next: NextFunction) 
   }
   next();
 };
+
+
+
+export const isBuyer = (req: CustomRequest, res: Response, next: NextFunction) => {
+  // console.log("into the customers");
+  if (req.user?.role !== 'customer') {
+    return res.status(403).json({ message: 'Forbidden: Customers only' });
+  }
+  next();
+};

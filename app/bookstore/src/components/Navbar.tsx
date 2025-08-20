@@ -57,16 +57,14 @@ export default function Navbar() {
 
       {loggedIn && (
         <div className="navbar-middle">
-          <Link to="/customer/home">Home</Link>
-          <Link to="/customer/categories">Categories</Link>
-          <Link to="/customer/orders">Orders</Link>
+          
         </div>
       )}
 
       <div className="navbar-right">
         {loggedIn ? (
           <div className="icons-container">
-            <Link to="/customer/cart" className="icon-link">
+            <Link to="/api/cart" className="icon-link">
               <Cart size={22} />
             </Link>
             <div className="profile-dropdown2">
@@ -77,11 +75,14 @@ export default function Navbar() {
               />
               {dropdownOpen && (
                 <div className="dropdown-menu">
-                  <Link to="/customer/account" onClick={closeDropdown}>
-                    My Account
+                  <Link to="/api/profile" onClick={closeDropdown}>
+                    My Profile
                   </Link>
-                  <Link to="/customer/wishlist" onClick={closeDropdown}>
-                    Wishlist
+                  <Link to="/api/orders" onClick={closeDropdown}>
+                    My Orders
+                  </Link>
+                  <Link to="/api/reviews" onClick={closeDropdown}>
+                    My Reviews
                   </Link>
                   <button onClick={handleLogout}>Logout</button>
                 </div>

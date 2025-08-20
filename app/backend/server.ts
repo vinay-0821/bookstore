@@ -4,7 +4,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import authRoutes from './auth/authRoutes.ts';
 import adminRoutes from './admin/adminRoutes.ts';
-import sellerRoutes from './seller/Sellerroutes.ts';  // why? original name is not working
+import sellerRoutes from './seller/sellerRoutes.ts';  
+import buyerRoutes from './buyer/buyerRoutes.ts';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(authRoutes);
 app.use('/admin',adminRoutes);
 app.use('/seller',sellerRoutes);
+app.use('/api', buyerRoutes);
 
 // app.get('/test', (req, res) => {
 //   res.send('Backend is working!');

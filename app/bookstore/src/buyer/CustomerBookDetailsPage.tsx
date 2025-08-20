@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchBookDetails, fetchBookReviews } from "../services/adminapis";
 import "../components/css/BookDetailsPage.css";
 import Navbar from "../components/Navbar";
+import { fetchBookDetailsBuyer, fetchBookReviewsBuyer } from "../services/buyerapis";
 
 const defaultBookImg = require("../assets/bookmain.jpg");
 
@@ -19,7 +19,6 @@ interface Book {
   seller_name: string;
   seller_email: string;
   genres: string;
-  soldCount: string | number;
   images?: string[];
 }
 
@@ -45,8 +44,8 @@ export default function CustomerBookDetailsPage() {
         if (!bookid) return;
 
         const [bookData, reviewData] = await Promise.all([
-          fetchBookDetails(bookid),
-          fetchBookReviews(bookid),
+          fetchBookDetailsBuyer(bookid),
+          fetchBookReviewsBuyer(bookid),
         ]);
 
         setBook(bookData);
@@ -71,10 +70,14 @@ export default function CustomerBookDetailsPage() {
       <Navbar />
       <div className="book-page">
         <div className="book-left">
-          <img
+          
+          {/* <img
             src={book.images && book.images[0] ? book.images[0] : defaultBookImg}
             alt={book.title}
-          />
+          /> */}
+
+          <img src={ defaultBookImg} alt={book.title} />
+
         </div>
 
         <div className="book-right">
@@ -86,8 +89,12 @@ export default function CustomerBookDetailsPage() {
             <p><strong>Seller:</strong> {book.seller_name} ({book.seller_email})</p>
             <p><strong>Price:</strong> ₹{book.price}</p>
             <p><strong>Stock Left:</strong> {book.availableCount}</p>
-            <p><strong>Sold:</strong> {book.soldCount}</p>
             <p><strong>Published:</strong> {new Date(book.date_publish).toLocaleDateString()}</p>
+
+            <div className="action-buttons">
+              <button className="add-cart-btn">🛒 Add to Cart</button>
+              <button className="buy-now-btn">⚡ Buy Now</button>
+            </div>
           </div>
 
           <div className="book-reviews">
