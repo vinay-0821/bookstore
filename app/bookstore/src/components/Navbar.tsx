@@ -50,7 +50,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/customer/home" className="app-name">
+        <Link to="/home" className="app-name">
           BookStore
         </Link>
       </div>
@@ -81,9 +81,7 @@ export default function Navbar() {
                   <Link to="/api/orders" onClick={closeDropdown}>
                     My Orders
                   </Link>
-                  <Link to="/api/reviews" onClick={closeDropdown}>
-                    My Reviews
-                  </Link>
+                  
                   <button onClick={handleLogout}>Logout</button>
                 </div>
               )}

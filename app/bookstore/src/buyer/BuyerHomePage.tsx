@@ -61,7 +61,7 @@ export default function BuyerHomePage() {
   }, []);
 
   console.log(books);
-  console.log(genres);
+  // console.log(genres);
 
   const filteredBooks = useMemo(() => {
     const search = filters.search.trim().toLowerCase();
@@ -76,10 +76,19 @@ export default function BuyerHomePage() {
       return diff <= days;
     };
 
+    
+
     let result = books.filter((b) => {
+
+      // const stockCount = b.availableCount;
+
+      console.log("available count",b.availableCount);
+
       const priceNum = Number(b.price);
       const ratingNum = typeof b.rating === "number" ? b.rating : 0;
       const hasStock = b.availableCount > 0;
+
+      console.log("hasStock", hasStock);
 
       const genresList = b.genres
         ? b.genres.split(",").map((g) => g.trim().toLowerCase())
@@ -188,16 +197,21 @@ export default function BuyerHomePage() {
                 </div>
 
                 <div className="books-grid">
-                  {filteredBooks.map((b) => (
-                    <Link
-                      key={b.bookid}
-                      to={`/api/books/${b.bookid}`}
-                      className="book-link"
-                    >
-                      <BookCard book={b} />
-                    </Link>
-                  ))}
+                  {filteredBooks.map((b) => {
+                    const isOutOfStock = b.availableCount <= 0;
+                    return (
+                      <Link
+                        key={b.bookid}
+                        to={`/api/books/${b.bookid}`}
+                        className={`book-link ${isOutOfStock ? "out-of-stock" : ""}`}
+                      >
+                        <BookCard book={b} />
+                        {isOutOfStock && <div className="out-of-stock-overlay">Out of Stock</div>}
+                      </Link>
+                    );
+                  })}
                 </div>
+
               </>
             )}
           </main>

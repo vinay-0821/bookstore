@@ -1,0 +1,131 @@
+.my-orders-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.my-orders-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  transition: transform 0.2s ease-in-out, background 0.3s ease;
+  cursor: pointer;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  background: #fafafa;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.8rem;
+}
+
+.order-id {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.order-date {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.order-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2a7;
+}
+
+.order-books-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.order-books-row::-webkit-scrollbar {
+  height: 6px;
+}
+.order-books-row::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.order-book {
+  min-width: 180px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.order-book .quantity {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #444;
+  text-align: center;
+}
+
+.order-book .book-card {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: box-shadow 0.2s ease;
+}
+
+.order-book .book-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.review-btn {
+  background-color: #ffcc00; 
+  color: #333;
+  border: none;
+  margin-top: 20px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-btn:hover {
+  background-color: #ffb700; 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.review-btn:active {
+  background-color: #e6a900;
+  transform: translateY(0);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-btn:disabled {
+  background-color: #ddd;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+}

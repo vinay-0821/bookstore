@@ -1,5 +1,4 @@
 
-
 const BASE_URL = 'http://localhost:5000';
 
 export const signupUser = async (username: string, email: string, password: string, role: string, mobile: string, address: string) => {

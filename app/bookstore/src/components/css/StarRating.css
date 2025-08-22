@@ -1,0 +1,28 @@
+.star-rating {
+  display: flex;
+  gap: 0.75rem; /* spacing between stars */
+  justify-content: center;
+  align-items: center;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.star-button:hover {
+  transform: scale(1.1);
+}
+
+.star-icon {
+  width: 2.5rem;  /* w-10 */
+  height: 2.5rem; /* h-10 */
+  color: #d1d5db; /* gray-300 */
+}
+
+.star-icon.filled {
+  color: #facc15; /* yellow-400 */
+  fill: #facc15;
+}

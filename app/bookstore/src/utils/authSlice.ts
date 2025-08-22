@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 
+
 interface User {
   id: number;
   email: string;
@@ -42,6 +43,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem('token');
+      // localStorage.removeItem("cart"); 
     },
     getUser: (state) => {
       const token = localStorage.getItem('token');

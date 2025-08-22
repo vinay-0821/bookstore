@@ -1,8 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../components/css/BookDetailsPage.css";
 import Navbar from "../components/Navbar";
-import { fetchBookDetailsBuyer, fetchBookReviewsBuyer } from "../services/buyerapis";
+import { fetchBookDetailsBuyer, fetchBookReviewsBuyer, placeOrder, saveCart } from "../services/buyerapis";
+import PurchaseModal from "./PurchaseModal";
+import { addToCart } from "../utils/cartSlice";
+import { useDispatch } from "react-redux";
 
 const defaultBookImg = require("../assets/bookmain.jpg");
 
@@ -31,11 +34,16 @@ interface Review {
 
 export default function CustomerBookDetailsPage() {
   const { bookid } = useParams<{ bookid: string }>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [book, setBook] = useState<Book | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -60,6 +68,55 @@ export default function CustomerBookDetailsPage() {
 
     loadData();
   }, [bookid]);
+
+  const handleBuyNowClick = () => {
+    setShowPurchaseModal(true);
+  };
+
+  const handleConfirmPurchase = async (quantity: number) => {
+  if (!book) return;
+
+  const confirmed = window.confirm(
+    `Are you sure you want to buy ${quantity} copy/copies of "${book.title}" for ₹${
+      Number(book.price) * quantity
+    }?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await placeOrder(book.bookid, quantity, Number(book.price) * quantity);
+    alert("Purchase successful!");
+    setShowPurchaseModal(false);
+    navigate("/orders");
+  } catch (error) {
+    alert("Purchase failed. Please try again.");
+  }
+};
+
+
+const handleAddToCart = async () => {
+    if (!book) return;
+
+    const cartItem = {
+      bookid: book.bookid,
+      title: book.title,
+      price: Number(book.price),
+      quantity: 1,
+    };
+
+    dispatch(addToCart(cartItem));
+
+    try {
+      await saveCart([cartItem]);
+    } catch (err) {
+      console.error("Failed to save cart:", err);
+    }
+
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  };
+
 
   if (loading) return <div>Loading book details...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -92,8 +149,10 @@ export default function CustomerBookDetailsPage() {
             <p><strong>Published:</strong> {new Date(book.date_publish).toLocaleDateString()}</p>
 
             <div className="action-buttons">
-              <button className="add-cart-btn">🛒 Add to Cart</button>
-              <button className="buy-now-btn">⚡ Buy Now</button>
+               <button className="add-cart-btn" onClick={handleAddToCart}>
+                🛒 {addedToCart ? "Added!" : "Add to Cart"}
+              </button>
+              <button className="buy-now-btn" onClick={handleBuyNowClick}>⚡ Buy Now</button>
             </div>
           </div>
 
@@ -112,6 +171,20 @@ export default function CustomerBookDetailsPage() {
           </div>
         </div>
       </div>
+
+      {showPurchaseModal && book && (
+        <PurchaseModal
+          book={{
+            title: book.title,
+            author: book.author,
+            price: book.price,
+            availableCount: book.availableCount,
+            image: book.images && book.images[0],
+          }}
+          onClose={() => setShowPurchaseModal(false)}
+          onConfirm={handleConfirmPurchase}
+        />
+      )}
     </>
   );
 }

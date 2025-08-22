@@ -167,3 +167,151 @@ export async function getBuyerStats() {
   if (!res.ok) throw new Error("Failed to fetch buyer stats");
   return res.json();
 }
+
+
+export async function placeOrder(bookId: number, quantity: number, totalAmount: number) {
+  const res = await fetch("http://localhost:5000/api/purchase", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ bookId, quantity, totalAmount }),
+  });
+
+  if (!res.ok) throw new Error("Failed to place order");
+  return res.json();
+}
+
+
+
+interface CartItem {
+  bookid: number;
+  title: string;
+  price: number;
+  quantity: number;
+}
+
+
+export async function saveCart(cartItems: CartItem[]) {
+  const res = await fetch("http://localhost:5000/api/cart/save", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ items: cartItems }),
+  });
+
+  if (!res.ok) throw new Error("Failed to save cart");
+  return res.json();
+}
+
+export async function fetchCart() {
+  const res = await fetch("http://localhost:5000/api/cart", {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch cart");
+  return res.json();
+}
+
+export async function removeCartItem(bookid: number) {
+  const res = await fetch(`http://localhost:5000/api/cart/${bookid}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to remove item from cart");
+  return res.json();
+}
+
+export async function clearCartDB() {
+  const res = await fetch("http://localhost:5000/api/cart", {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to clear cart");
+  return res.json();
+}
+
+
+export async function updateCartItemQuantity(bookid: number, quantity: number) {
+  const res = await fetch(`http://localhost:5000/api/cart/${bookid}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ quantity }),
+  });
+
+  if (!res.ok) throw new Error("Failed to update cart item quantity");
+  return res.json();
+}
+
+
+
+export async function purchaseCart(items: { bookid: number; quantity: number }[]) {
+  // console.log("api calling", items);
+  const res = await fetch("http://localhost:5000/api/cart/purchasecart", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ items }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Purchase failed");
+  }
+
+  return res.json();
+}
+
+
+export const getBuyerOrders = async () => {
+  // console.log("Im in buyerapi");
+  const res = await fetch("http://localhost:5000/api/orders/buyer", {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch buyer orders");
+  }
+
+  return await res.json();
+};
+
+
+
+export const postReview = async (bookId: number, description: string, rating: number) => {
+  console.log("in post api call",bookId, description, rating);
+  const res = await fetch("http://localhost:5000/api/reviews", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      bookId,
+      description,
+      rating,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to post review");
+  }
+
+  return await res.json();
+};
+
+
+
+export const putReview = async (bookId: number, reviewId: number, description: string, rating: number) => {
+  const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      bookId,
+      description,
+      rating,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update review");
+  }
+
+  return await res.json();
+};

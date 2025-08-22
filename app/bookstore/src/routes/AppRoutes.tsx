@@ -21,6 +21,9 @@ import SellerAddBook from '../seller/SellerAddBook'
 import BuyerHomePage from '../buyer/BuyerHomePage'
 import CustomerBookDetailsPage from '../buyer/CustomerBookDetailsPage'
 import BuyerProfile from '../buyer/BuyerProfile'
+import Cart from '../buyer/Cart'
+import MyOrders from '../buyer/MyOrders'
+import WriteReview from '../buyer/WriteReview'
 
 export default function AppRoutes() {
   return (
@@ -44,6 +47,9 @@ export default function AppRoutes() {
         <Route path="/home" element={<PrivateRoute allowedRoles={['customer']}><BuyerHomePage /></PrivateRoute>} />
         <Route path="/api/books/:bookid" element={<PrivateRoute allowedRoles={['customer']}><CustomerBookDetailsPage /></PrivateRoute>} />
         <Route path="/api/profile" element={<PrivateRoute allowedRoles={['customer']}><BuyerProfile /></PrivateRoute>} />
+        <Route path="/api/cart" element={<PrivateRoute allowedRoles={['customer']}><Cart /></PrivateRoute>} />
+        <Route path="/api/orders" element={<PrivateRoute allowedRoles={['customer']}><MyOrders /></PrivateRoute>} />
+        <Route path="/reviews/:bookid" element={<PrivateRoute allowedRoles={['customer']}><WriteReview /></PrivateRoute>} />
         {/* <Route path="/sellerhome" element={<SellerNavbar />} /> */}
     </Routes>
   )

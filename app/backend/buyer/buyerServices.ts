@@ -13,7 +13,7 @@ export const getAllBooksBuyer = async () => {
         b.description,
         b.price,
         b.date_publish,
-        b.stock as avaliableCount,
+        b.stock as availableCount,
         b.imageurl as images,
         s.userid as seller_id,
         s.name AS seller_name,
@@ -36,6 +36,9 @@ export const getAllBooksBuyer = async () => {
     const ratingNum = row.rating !== null && row.rating !== undefined 
         ? Number(row.rating) 
         : null;
+
+        console.log(row.availableCount);
+        console.log(typeof row.availableCount);
 
     return {
         bookid: row.bookid,
@@ -166,3 +169,336 @@ export async function fetchBuyerStats(userId: number) {
     moneySpent: (moneySpentResult as any[])[0].moneySpent || 0,
   };
 }
+
+
+
+export async function handlePurchase(
+  userId: number,
+  bookId: number,
+  quantity: number,
+  totalAmount: number
+) {
+  const conn = await db;
+  try {
+    await conn.beginTransaction();
+
+    const [book] = await conn.query("SELECT stock, price FROM books WHERE bookid = ?", [bookId]);
+    if (!Array.isArray(book) || book.length === 0) {
+      throw new Error("Book not found");
+    }
+
+    const currentStock = (book as any)[0].stock;
+    const bookPrice = (book as any)[0].price;
+
+    if (currentStock < quantity) {
+      throw new Error("Not enough stock available");
+    }
+
+    await conn.query("UPDATE books SET stock = stock - ? WHERE bookid = ?", [quantity, bookId]);
+
+    const [orderResult]: any = await conn.query(
+      "INSERT INTO orders (userid, total_amount) VALUES (?, ?)",
+      [userId, totalAmount]
+    );
+    const orderId = orderResult.insertId;
+
+    await conn.query(
+      "INSERT INTO order_item (orderid, bookid, quantity, price) VALUES (?, ?, ?, ?)",
+      [orderId, bookId, quantity, bookPrice]
+    );
+
+    await conn.commit();
+
+    return { orderId, bookId, quantity, totalAmount };
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  } finally {
+    console.log("Purchase Completed");
+  }
+}
+
+
+export interface CartItem {
+  bookid: number;
+  title: string;
+  price: number;
+  quantity: number;
+}
+
+async function getOrCreateCart(userId: number) {
+  const conn = await db;
+
+  const [rows]: any = await conn.query(
+    "SELECT cartid FROM cart WHERE userid = ?",
+    [userId]
+  );
+
+  if (rows.length > 0) {
+    return rows[0].cartid;
+  }
+
+  const [result]: any = await conn.query(
+    "INSERT INTO cart (userid) VALUES (?)",
+    [userId]
+  );
+  return result.insertId;
+}
+
+export async function saveCartService(userId: number, items: CartItem[]) {
+  const conn = await db;
+
+  let cartId = await getOrCreateCart(userId);
+
+  for (const item of items) {
+    const [itemRows]: any = await conn.query(
+      "SELECT * FROM cartitem WHERE cartid = ? AND bookid = ?",
+      [cartId, item.bookid]
+    );
+
+    if (itemRows.length > 0) {
+      await conn.query(
+        "UPDATE cartitem SET quantity = quantity + ? WHERE cartid = ? AND bookid = ?",
+        [item.quantity, cartId, item.bookid]
+      );
+    } else {
+      await conn.query(
+        "INSERT INTO cartitem (cartid, bookid, quantity) VALUES (?, ?, ?)",
+        [cartId, item.bookid, item.quantity]
+      );
+    }
+  }
+}
+
+
+
+export async function fetchCartService(userId: number) {
+  const [rows] = await (await db).query(
+    `SELECT ci.bookid, b.title, b.price, ci.quantity
+     FROM cartitem ci
+     JOIN cart c ON ci.cartid = c.cartid
+     JOIN books b ON ci.bookid = b.bookid
+     WHERE c.userid = ?`,
+    [userId]
+  );
+  return rows;
+}
+
+export async function removeCartItemService(userId: number, bookid: number) {
+  const conn = await db;
+  try {
+    await conn.beginTransaction();
+
+    await conn.query(
+      `DELETE ci FROM cartitem ci
+       JOIN cart c ON ci.cartid = c.cartid
+       WHERE c.userid = ? AND ci.bookid = ?`,
+      [userId, bookid]
+    );
+
+    await conn.query(
+      `DELETE c FROM cart c
+       LEFT JOIN cartitem ci ON c.cartid = ci.cartid
+       WHERE c.userid = ? AND ci.cartid IS NULL`,
+      [userId]
+    );
+
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  }
+}
+
+
+export async function clearCartDBService(userId: number) {
+  await (await db).query(
+    `DELETE ci FROM cartitem ci
+     JOIN cart c ON ci.cartid = c.cartid
+     WHERE c.userid = ?`,
+    [userId]
+  );
+}
+
+
+export async function updateCartItemQuantityService(userId: number, bookid: number, quantity: number) {
+  const conn = await db;
+
+  await conn.query(
+    `UPDATE cartitem ci
+     JOIN cart c ON ci.cartid = c.cartid
+     SET ci.quantity = ?
+     WHERE c.userid = ? AND ci.bookid = ?`,
+    [quantity, userId, bookid]
+  );
+}
+
+
+
+export async function handleCartPurchase(
+  userId: number,
+  items: { bookid: number; quantity: number }[]
+) {
+  const conn = await db;
+
+  try {
+    await conn.beginTransaction();
+
+    let totalAmount = 0;
+
+    for (const item of items) {
+      const [book]: any = await conn.query(
+        "SELECT stock, price FROM books WHERE bookid = ?",
+        [item.bookid]
+      );
+
+      if (!book || book.length === 0) {
+        throw new Error(`Book with id ${item.bookid} not found`);
+      }
+
+      const currentStock = book[0].stock;
+      const bookPrice = book[0].price;
+
+      if (currentStock < item.quantity) {
+        throw new Error(
+          `Not enough stock for bookid ${item.bookid}. Available: ${currentStock}, Required: ${item.quantity}`
+        );
+      }
+
+      totalAmount += bookPrice * item.quantity;
+    }
+
+    const [orderResult]: any = await conn.query(
+      "INSERT INTO orders (userid, total_amount) VALUES (?, ?)",
+      [userId, totalAmount]
+    );
+    const orderId = orderResult.insertId;
+
+    for (const item of items) {
+      const [book]: any = await conn.query(
+        "SELECT price FROM books WHERE bookid = ?",
+        [item.bookid]
+      );
+      const bookPrice = book[0].price;
+
+      await conn.query(
+        "INSERT INTO order_item (orderid, bookid, quantity, price) VALUES (?, ?, ?, ?)",
+        [orderId, item.bookid, item.quantity, bookPrice]
+      );
+
+      await conn.query(
+        "UPDATE books SET stock = stock - ? WHERE bookid = ?",
+        [item.quantity, item.bookid]
+      );
+    }
+
+    await conn.query(
+      `DELETE ci FROM cartitem ci
+       JOIN cart c ON ci.cartid = c.cartid
+       WHERE c.userid = ?`,
+      [userId]
+    );
+
+    await conn.commit();
+
+    return { orderId, totalAmount, items };
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  }
+}
+
+
+
+export const getAllBuyerOrders = async (buyerId: number) => {
+  const [orders]: any = await (await db).query(
+    `SELECT o.orderid, o.dateoforder, o.total_amount
+     FROM orders o
+     WHERE o.userid = ?
+     ORDER BY o.dateoforder DESC`,
+    [buyerId]
+  );
+
+  for (let order of orders) {
+    const [items]: any = await (await db).query(
+      `SELECT 
+          oi.orderitemid, 
+          oi.quantity, 
+          oi.price, 
+          b.bookid, 
+          b.title, 
+          b.author, 
+          b.imageurl,
+          r.reviewid,
+          r.review_description AS review_description,
+          r.rating AS review_rating,
+          r.review_date
+       FROM order_item oi
+       JOIN books b 
+         ON oi.bookid = b.bookid
+       LEFT JOIN review r 
+         ON r.bookid = b.bookid 
+        AND r.userid = ?   
+       WHERE oi.orderid = ?`,
+      [buyerId, order.orderid]
+    );
+
+    order.items = items;
+  }
+
+  return orders;
+};
+
+
+
+export const createReview = async (
+  userid: number,
+  bookid: number,
+  review_description: string,
+  rating: number
+) => {
+    // console.log(bookid,userid,review_description, rating);
+  const [result]: any = await (await db).query(
+    `INSERT INTO review (userid, bookid, review_description, rating)
+     VALUES (?, ?, ?, ?)`,
+    [userid, bookid, review_description, rating]
+  );
+
+  // console.log(result);
+
+  return {
+    reviewid: result.insertId,
+    userid,
+    bookid,
+    review_description,
+    rating,
+  };
+};
+
+
+
+export const updateReview = async (
+  bookid: number,
+  userid: number,
+  reviewid: number,
+  review_description: string,
+  rating: number
+) => {
+  // console.log(bookid,userid,review_description,reviewid, rating);
+  const [result]: any = await (await db).query(
+    `UPDATE review
+     SET review_description = ?, rating = ?
+     WHERE reviewid = ? AND userid = ? AND bookid = ?`,
+    [review_description, rating, reviewid, userid, bookid]
+  );
+  // console.log(result);
+
+  if (result.affectedRows === 0) return null;
+
+  return {
+    reviewid,
+    userid,
+    review_description,
+    rating,
+  };
+};
