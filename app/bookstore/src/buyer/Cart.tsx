@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../utils/store";
-import { removeFromCart, clearCart, increaseQuantity, decreaseQuantity, } from "../utils/cartSlice";
-import { saveCart, removeCartItem, clearCartDB, updateCartItemQuantity, purchaseCart } from "../services/buyerapis";
+import { removeFromCart, clearCart, increaseQuantity, decreaseQuantity, setCart, } from "../utils/cartSlice";
+import { saveCart, removeCartItem, clearCartDB, updateCartItemQuantity, purchaseCart, getCartFromDB } from "../services/buyerapis";
 import "./css/Cart.css";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  // console.log(cartItems);
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -37,20 +39,30 @@ export default function Cart() {
 
 
 
-    alert("Purchase successful!");
-    dispatch(clearCart());
-    navigate("/orders");
-  } catch (error) {
-    alert("Purchase failed. Please try again.");
-    console.error(error);
-  }
-};
+      alert("Purchase successful!");
+      dispatch(clearCart());
+      navigate("/api/orders");
+    } catch (error) {
+      alert("Purchase failed. Please try again.");
+      console.error(error);
+    }
+  };
 
-//   useEffect(() => {
-//     if (cartItems.length > 0) {
-//       saveCart(cartItems).catch((err) => console.error("Save failed:", err));
-//     }
-//   }, [cartItems]);
+
+  useEffect(() => {
+  const fetchCartItems = async () => {
+    try {
+      const dbCart = await getCartFromDB(); 
+      console.log(dbCart);
+      dispatch(setCart(dbCart));
+    } catch (err) {
+      console.error("Failed to load cart:", err);
+    }
+  };
+
+  fetchCartItems();
+}, []);
+  
 
   return (
 
@@ -70,32 +82,41 @@ export default function Cart() {
                     <h3>{item.title}</h3>
                     <p>Price: ₹{item.price}</p>
                     <div className="quantity-controls">
-                        <button
-                            onClick={() => {
-                                const newQty = item.quantity - 1;
-                                if (newQty > 0) {
-                                dispatch(decreaseQuantity(item.bookid));
-                                updateCartItemQuantity(item.bookid, newQty).catch(err =>
-                                    console.error("Decrease failed:", err)
-                                );
-                                }
-                            }}
-                            >
-                            -
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                            onClick={() => {
-                                const newQty = item.quantity + 1;
-                                dispatch(increaseQuantity(item.bookid));
-                                updateCartItemQuantity(item.bookid, newQty).catch(err =>
-                                console.error("Increase failed:", err)
-                                );
-                            }}
-                            >
-                            +
-                        </button>
+                      <button
+                        onClick={() => {
+                          const newQty = item.quantity - 1;
+                          if (newQty < 1) {
+                            alert("Quantity cannot be less than 1.");
+                            return;
+                          }
+                          dispatch(decreaseQuantity(item.bookid));
+                          updateCartItemQuantity(item.bookid, newQty).catch(err =>
+                            console.error("Decrease failed:", err)
+                          );
+                        }}
+                      >
+                        -
+                      </button>
+
+                      <span>{item.quantity}</span>
+
+                      <button
+                        onClick={() => {
+                          const newQty = item.quantity + 1;
+                          if (newQty > item.stock) {
+                            alert(`Only ${item.stock} units available in stock.`);
+                            return;
+                          }
+                          dispatch(increaseQuantity(item.bookid));
+                          updateCartItemQuantity(item.bookid, newQty).catch(err =>
+                            console.error("Increase failed:", err)
+                          );
+                        }}
+                      >
+                        +
+                      </button>
                     </div>
+
                     <p>Total: ₹{item.price * item.quantity}</p>
                     </div>
                     <button

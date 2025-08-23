@@ -88,7 +88,7 @@ export default function CustomerBookDetailsPage() {
     await placeOrder(book.bookid, quantity, Number(book.price) * quantity);
     alert("Purchase successful!");
     setShowPurchaseModal(false);
-    navigate("/orders");
+    navigate("/api/orders");
   } catch (error) {
     alert("Purchase failed. Please try again.");
   }
@@ -102,6 +102,7 @@ const handleAddToCart = async () => {
       bookid: book.bookid,
       title: book.title,
       price: Number(book.price),
+      stock: book.availableCount,
       quantity: 1,
     };
 

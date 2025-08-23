@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
-import { clearCartDBService, createReview, fetchBookDetailsBuyer, fetchBookReviewsBuyer, fetchBuyerStats, fetchCartService, getAllBooksBuyer, getAllBuyerOrders, getAllGenres, getBuyerById, handleCartPurchase, handlePurchase, removeCartItemService, saveCartService, updateBuyerDetails, updateBuyerPassword, updateCartItemQuantityService, updateReview } from "./buyerServices.ts";
+import { clearCartDBService, createReview, fetchBookDetailsBuyer, fetchBookReviewsBuyer, fetchBuyerStats, getAllBooksBuyer, getAllBuyerOrders, getAllGenres, getBuyerById, getCartService, handleCartPurchase, handlePurchase, removeCartItemService, saveCartService, updateBuyerDetails, updateBuyerPassword, updateCartItemQuantityService, updateReview } from "./buyerServices.ts";
 
 
 
@@ -191,25 +191,25 @@ export async function saveCart(req: Request, res: Response) {
 
 
 
-export async function fetchCart(req: Request, res: Response) {
-  const token = req.headers.authorization?.split(' ')[1];
-  const data = decodeToken(token);
+// export async function fetchCart(req: Request, res: Response) {
+//   const token = req.headers.authorization?.split(' ')[1];
+//   const data = decodeToken(token);
   
-  try {
-    let customerid = 0;
-    if (data && typeof data !== 'string') {
-    customerid = (data as JwtPayload).userid;
-    } 
-    else {
-    throw new Error('Invalid token payload');
-    }
+//   try {
+//     let customerid = 0;
+//     if (data && typeof data !== 'string') {
+//     customerid = (data as JwtPayload).userid;
+//     } 
+//     else {
+//     throw new Error('Invalid token payload');
+//     }
 
-    const cart = await fetchCartService(customerid);
-    res.json(cart);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch cart" });
-  }
-}
+//     const cart = await fetchCartService(customerid);
+//     res.json(cart);
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to fetch cart" });
+//   }
+// }
 
 
 
@@ -387,5 +387,27 @@ export const putReviewBuyer = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Error updating review:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export const getCartController = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const data = decodeToken(token);
+
+  try {
+    let customerid = 0;
+    if (data && typeof data !== "string") {
+      customerid = (data as JwtPayload).userid;
+    } else {
+      throw new Error("Invalid token payload");
+    }
+
+    const cartItems = await getCartService(customerid);
+    console.log(cartItems);
+    res.json(cartItems);
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    res.status(500).json({ message: "Failed to fetch cart" });
   }
 };

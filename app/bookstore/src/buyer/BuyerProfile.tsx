@@ -122,11 +122,9 @@ export default function BuyerProfile() {
           <div className="quick-links">
             <h3>Quick Links</h3>
             <button className="link-btn" onClick={() => navigate("/api/orders")}>
-              <ShoppingBag size={16} /> My Orders
+              <ShoppingBag size={16} /> My Orders & Reviews
             </button>
-            <button className="link-btn" onClick={() => navigate("/api/reviews")}>
-              <Star size={16} /> My Reviews
-            </button>
+            
           </div>
 
           <div className="change-password">

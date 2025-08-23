@@ -201,15 +201,15 @@ export async function saveCart(cartItems: CartItem[]) {
   return res.json();
 }
 
-export async function fetchCart() {
-  const res = await fetch("http://localhost:5000/api/cart", {
-    method: "GET",
-    headers: getAuthHeaders(),
-  });
+// export async function fetchCart() {
+//   const res = await fetch("http://localhost:5000/api/cart", {
+//     method: "GET",
+//     headers: getAuthHeaders(),
+//   });
 
-  if (!res.ok) throw new Error("Failed to fetch cart");
-  return res.json();
-}
+//   if (!res.ok) throw new Error("Failed to fetch cart");
+//   return res.json();
+// }
 
 export async function removeCartItem(bookid: number) {
   const res = await fetch(`http://localhost:5000/api/cart/${bookid}`, {
@@ -315,3 +315,14 @@ export const putReview = async (bookId: number, reviewId: number, description: s
 
   return await res.json();
 };
+
+
+export async function getCartFromDB() {
+  const res = await fetch("http://localhost:5000/api/cart", {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch cart");
+  return res.json();
+}

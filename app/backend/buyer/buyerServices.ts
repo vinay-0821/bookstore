@@ -272,17 +272,17 @@ export async function saveCartService(userId: number, items: CartItem[]) {
 
 
 
-export async function fetchCartService(userId: number) {
-  const [rows] = await (await db).query(
-    `SELECT ci.bookid, b.title, b.price, ci.quantity
-     FROM cartitem ci
-     JOIN cart c ON ci.cartid = c.cartid
-     JOIN books b ON ci.bookid = b.bookid
-     WHERE c.userid = ?`,
-    [userId]
-  );
-  return rows;
-}
+// export async function fetchCartService(userId: number) {
+//   const [rows] = await (await db).query(
+//     `SELECT ci.bookid, b.title, b.price, ci.quantity
+//      FROM cartitem ci
+//      JOIN cart c ON ci.cartid = c.cartid
+//      JOIN books b ON ci.bookid = b.bookid
+//      WHERE c.userid = ?`,
+//     [userId]
+//   );
+//   return rows;
+// }
 
 export async function removeCartItemService(userId: number, bookid: number) {
   const conn = await db;
@@ -501,4 +501,31 @@ export const updateReview = async (
     review_description,
     rating,
   };
+};
+
+
+
+export interface CartItem {
+  bookid: number;
+  title: string;
+  price: number;
+  quantity: number;
+  stock: number;
+}
+
+export const getCartService = async (userId: number): Promise<CartItem[]> => {
+  const [rows] = await (await db).query(
+    `
+    SELECT ci.bookid, b.title, b.price, ci.quantity, b.stock
+    FROM cartitem ci
+    JOIN cart c ON c.cartid = ci.cartid
+    JOIN books b ON ci.bookid = b.bookid
+    WHERE c.userid = ?
+    `,
+    [userId]
+  );
+
+  console.log(rows);
+
+  return rows as CartItem[];
 };

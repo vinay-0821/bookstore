@@ -1,6 +1,6 @@
 import express from 'express';
 import { isBuyer, verifyToken } from '../utils/middleware.ts';
-import { changeBuyerPassword, clearCartDB, fetchAllBooksBuyer, fetchAllBuyerOrders, fetchCart, fetchGenresBuyer, getBookDetailsBuyer, getBookReviewsBuyer, getBuyerStats, getProfileDetailsBuyer, postReviewBuyer, putReviewBuyer, removeCartItem, saveCart, updateBuyerProfileDetails, updateCartItemQuantityDB, updateCartPurchase, updatePurchase } from './buyerController.ts';
+import { changeBuyerPassword, clearCartDB, fetchAllBooksBuyer, fetchAllBuyerOrders, fetchGenresBuyer, getBookDetailsBuyer, getBookReviewsBuyer, getBuyerStats, getCartController, getProfileDetailsBuyer, postReviewBuyer, putReviewBuyer, removeCartItem, saveCart, updateBuyerProfileDetails, updateCartItemQuantityDB, updateCartPurchase, updatePurchase } from './buyerController.ts';
 
 
 const router = express.Router();
@@ -27,7 +27,7 @@ router.post('/purchase', updatePurchase);
 
 router.post("/cart/save", saveCart);
 
-router.get("/cart", fetchCart);
+// router.get("/cart", fetchCart);
 
 router.delete("/cart/:bookid", removeCartItem);
 
@@ -42,5 +42,7 @@ router.get('/orders/buyer', fetchAllBuyerOrders);
 router.post('/reviews', postReviewBuyer);
 
 router.put('/reviews/:reviewid', putReviewBuyer);
+
+router.get('/cart', getCartController);
 
 export default router;
