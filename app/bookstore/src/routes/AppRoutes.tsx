@@ -24,6 +24,8 @@ import BuyerProfile from '../buyer/BuyerProfile'
 import Cart from '../buyer/Cart'
 import MyOrders from '../buyer/MyOrders'
 import WriteReview from '../buyer/WriteReview'
+import PendingApproval from '../auth/PendingApproval'
+import ForgotPassword from '../auth/ForgotPassword'
 
 export default function AppRoutes() {
   return (
@@ -31,6 +33,8 @@ export default function AppRoutes() {
         <Route path='/' element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} /> {/* implement feature that it has to navigate to home when tries to goes to login page after loggedin */}
+        <Route path="/seller/pending" element={<PendingApproval />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/admin/approvesellers" element={<PrivateRoute allowedRoles={['admin']}><SellerApprovalPage /></PrivateRoute>} />
         <Route path="/admin/customers" element={<PrivateRoute allowedRoles={['admin']}><AdminCustomers /></PrivateRoute>} />

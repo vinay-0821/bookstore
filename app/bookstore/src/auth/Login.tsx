@@ -5,8 +5,9 @@ import "./auth.css";
 import { jwtDecode } from 'jwt-decode';
 import { login } from '../utils/authSlice';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../services/authapi';
+import { getSellerapprove, loginUser } from '../services/authapi';
 import Navbar from '../components/Navbar';
+import PendingApproval from './PendingApproval';
 // import { bookImg } from "../assets/bookmain.jpg"
 
 export default function Login() {
@@ -21,8 +22,19 @@ export default function Login() {
     e.preventDefault();
 
     try {
+      console.log("Checking approval for:", email); 
+
+      // const data = await getSellerapprove(email);
+
+      // console.log("user data: ",data);
+
+      // if (data.role === "seller" && data.isapproved === 0) {
+      //   navigate("/seller/pending");
+      //   return ;
+      // }
+      
       const res = await loginUser(email, password);
-      // console.log("it is logging in", res)
+      console.log("it is logging in", res)
 
       const token = res.token;
       const decoded: any = jwtDecode(token);
@@ -41,7 +53,15 @@ export default function Login() {
         navigate('/home');
       }
       else if(user.role === 'seller'){ 
-        navigate('/seller/dashboard'); 
+        const data = await getSellerapprove(email);
+        if(data.isapproved === 0){
+          navigate("/seller/pending");
+          return ;
+        }
+        else {
+          navigate('/seller/dashboard'); 
+        }
+        
       }
     } 
     catch (err: any) {
@@ -63,8 +83,19 @@ export default function Login() {
             <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
             <button type="submit">Login</button>
           </form>
-          <p>Don't have an account? <a href="/signup">Sign up</a></p>
-        </div>
+
+          <div className="login-footer">
+            <p>
+              <a href="/forgot-password" >
+                Forgot Password
+              </a>
+            </p>
+
+            <p>
+              <a href="/signup">Don't have an account?</a>
+            </p>
+          </div>
+         </div>
       </div>
     </div>
   )

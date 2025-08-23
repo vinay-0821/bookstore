@@ -98,9 +98,27 @@ img {
   margin-bottom: 1rem;
   justify-content: center;
 }
+
 .role-toggle label {
   font-weight: 600;
   cursor: pointer;
+}
+
+
+.login-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
 }
 
 
@@ -125,6 +143,80 @@ img {
     max-width: 90%;
   }
 }
+
+
+.forgot-password {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.forgot-password h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.forgot-password form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password input {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.forgot-password input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.forgot-password button {
+  padding: 12px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.forgot-password button:hover {
+  background-color: #0056b3;
+}
+
+.forgot-password p {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.forgot-password p[style*="green"] {
+  color: green;
+}
+
+.forgot-password p[style*="red"] {
+  color: red;
+}
+
+@media (max-width: 500px) {
+  .forgot-password {
+    margin: 20px;
+    padding: 20px;
+  }
+}
+
+
 
 @media (max-width: 480px) {
   .login-form h1,

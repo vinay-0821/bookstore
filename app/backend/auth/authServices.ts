@@ -15,6 +15,7 @@ interface User {
   email: string;
   phoneNo: string;
   address?: string;
+  approved?: boolean;
   date_of_birth?: Date; 
   join_date?: Date;     
 }
@@ -28,6 +29,7 @@ interface UserToken {
 
 export async function findUserByEmail(email: string): Promise<User | null> {
   const [rows]: any = await (await db).query('SELECT * FROM users WHERE email = ?', [email]);
+  // console.log(rows);
   return rows[0] || null;
 }
 
@@ -78,4 +80,20 @@ export function verifyToken(token: string) {
   } catch (err) {
     return { valid: false, message: 'Token is invalid or expired' };
   }
+}
+
+
+
+export async function updateUserPassword(email: string, newPassword: string) {
+  const user = await findUserByEmail(email);
+  if (!user) throw new Error("Email does not exist");
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await (await db).query("UPDATE users SET password = ? WHERE email = ?", [
+    hashedPassword,
+    email,
+  ]);
+
+  return { message: "Password updated successfully" };
 }
